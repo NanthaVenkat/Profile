@@ -1,52 +1,120 @@
 // toggle bar 
 const togglebutton = document.getElementsByClassName("toggle-button")[0];
 const navbarlinks = document.getElementsByClassName("nav-links")[0];
+const overlay = document.querySelector(".overlay");
+const cursor = document.querySelector(".cursor");
 
+// link scroll
+document.addEventListener("DOMContentLoaded", function() {
+
+    // Links
+    const Profile = document.querySelector(".prolink");
+    const experience = document.querySelector(".explink");
+    const education = document.querySelector(".edulink");
+    const skills = document.querySelector(".skillink");
+    const contact = document.querySelector(".contlink");
+
+    Profile.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const profSec = document.getElementById("profile");
+        profSec.scrollIntoView({behavior: "smooth"});
+    });
+
+    experience.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const expSec = document.getElementById("experience");
+        expSec.scrollIntoView({behavior: "smooth"});
+    });
+
+    education.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const eduSec = document.getElementById("education");
+        eduSec.scrollIntoView({behavior: "smooth"});
+    });
+
+    skills.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const skillSec = document.getElementById("skill");
+        skillSec.scrollIntoView({behavior: "smooth"});
+    });
+
+    contact.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const contSec = document.getElementById("contact");
+        contSec.scrollIntoView({behavior: "smooth"});
+    });
+});
+
+
+// custom cursor
+document.addEventListener("mousemove", e => {
+    cursor.setAttribute("style", "top:" + (e.pageY) + "px; left:" + (e.pageX) + "px;")
+});
+
+// overlay
 togglebutton.addEventListener( "click", ()=> {
-    navbarlinks.classList.toggle('active')
-} )
+    navbarlinks.classList.toggle('active');
+    overlay.classList.toggle('active');
+} );
 
-// nav color change by scrolling.
+overlay.addEventListener("click", () => {
+    overlay.classList.remove("active");
+    navbarlinks.classList.remove("active");
+});
+
+// navbar scrolli action
 
 const navbar = document.querySelector(".navbar");
 const navLink = document.querySelector(".nav-links");
 const toggleButton = document.querySelector(".toggle-button")
 
-window.addEventListener( 'scroll', ()=> {
+let lastScrollTop = 0;
+
+window.addEventListener('scroll', () => {
     const scrollPos = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.body.clientHeight;
+
+    if (scrollPos > 0 && scrollPos < (documentHeight - windowHeight)) {
+        if (scrollPos < lastScrollTop) {
+            navbar.style.top = '0';
+        } else {
+            navbar.style.top = '-90px';
+        }
+        lastScrollTop = scrollPos <= 0 ? 0 : scrollPos;
+    } else if (scrollPos >= (documentHeight - windowHeight)) {
+        navbar.style.top = '0';
+    }
 
     if (scrollPos > 0) {
         navbar.classList.add("scroll");
         navLink.classList.add("scroll");
         toggleButton.classList.add("scroll");
-    }
-    else {
-        navbar.style.backgroundColor = "##2b7a78";
+    } else {
+        navbar.style.backgroundColor = "##8666f3";
         navbar.classList.remove("scroll");
         navLink.classList.remove("scroll");
         toggleButton.classList.remove("scroll");
     }
-})
+});
 
-function downloadPDF() {
-    // Replace 'path/to/your/file.pdf' with the actual path to your PDF file.
-    const pdfPath = 'resume/resume.pdf';
+function cvDownload() {
+    const pdfPath = 'ResumePdf/resume.pdf';
 
-    // Create an anchor element
     const anchor = document.createElement('a');
 
-    // Set the href attribute to the PDF file path
     anchor.href = pdfPath;
 
-    // Set the download attribute with the desired file name
-    anchor.download = 'Nkresume.pdf';
+    anchor.download = 'NanthaCv.pdf';
 
-    // Append the anchor to the body
     document.body.appendChild(anchor);
 
-    // Trigger a click event on the anchor
     anchor.click();
 
-    // Remove the anchor from the body
     document.body.removeChild(anchor);
 }
